@@ -1,0 +1,573 @@
+#+TITLE: PAKA DOOM
+#+AUTHOR: Paurini Wiringi
+#+DESCRIPTION: Get the fuck out of my config, make your own.
+
+#+html: <p align="center"><img src="https://media3.giphy.com/media/94Y7qY5RWUhGg/giphy.gif"></p>
+
+The fuck you doing here? make your own config...
+
+* TABLE OF CONTENTS :TOC:
+- [[#doom-emacs][DOOM EMACS]]
+  - [[#️-doom-emacs---init][⚙️ DOOM EMACS - INIT]]
+  - [[#-doom-emacs---fonts][🌟 DOOM EMACS - FONTS]]
+- [[#-packages][📦 PACKAGES]]
+  - [[#-packages---init][⚙ PACKAGES - Init]]
+  - [[#-dart-mode][📦 DART-MODE]]
+  - [[#-lsp-dart][📦 LSP-DART]]
+  - [[#-lsp-mode][📦 LSP-MODE]]
+  - [[#-lsp-ui][📦 LSP-UI]]
+  - [[#-comapny][📦 COMAPNY]]
+  - [[#-company-box][📦 COMPANY-BOX]]
+  - [[#-all-the-icons][📦 ALL-THE-ICONS]]
+  - [[#-projectile][📦 PROJECTILE]]
+  - [[#-beacon][📦 BEACON]]
+  - [[#-nyan-mode][📦 NYAN-MODE]]
+- [[#️-combos][🎮️ COMBOS]]
+  - [[#️-window][🎮️ WINDOW]]
+  - [[#️-lsp-ui][🎮️ LSP-UI]]
+  - [[#️-lsp-mode][🎮️ LSP-MODE]]
+  - [[#️-lsp-dart][🎮️ LSP-DART]]
+  - [[#-dap-mode][🎮 DAP-MODE]]
+
+* DOOM EMACS
+
+** ⚙️ DOOM EMACS - INIT
+
+*** ⚙️ Start maximzed
+  #+begin_src elisp
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  #+end_src
+
+** 🌟 DOOM EMACS - FONTS
+
+#+begin_src elisp
+;; (set-face-attribute 'default nil
+;; :font "Source Code Pro"
+;; :height 110
+;; :weight 'medium)
+;; (set-face-attribute 'variable-pitch nil
+;; :font "Ubuntu Nerd Font"
+;; :height 120
+;; :weight 'medium)
+;; (set-face-attribute 'fixed-pitch nil
+;; :font "Source Code Pro"
+;; :height 110
+;; :weight 'medium)
+#+end_src
+
+
+* 📦 PACKAGES
+
+** ⚙ PACKAGES - Init
+Get packages.
+#+begin_src elisp
+(use-package beacon)
+(use-package nyan-mode)
+#+end_src
+
+
+** 📦 DART-MODE
+An Emacs major mode for editing Dart files. Provides basic syntax highlighting and indentation.
+
+https://github.com/bradyt/dart-mode
+
+
+*** ⚙️ DART-MODE - Setup
+#+begin_src elisp
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+
+
+(setq package-selected-packages
+  '(dart-mode lsp-mode lsp-treemacs flycheck lsp-ui lsp-dart))
+
+(when (cl-find-if-not #'package-installed-p package-selected-packages)
+  (package-refresh-contents)
+  (mapc #'package-install package-selected-packages))
+
+(add-hook 'dart-mode-hook 'lsp)
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024))
+
+;; Let projectile know how to deal with dart/flutter directories.
+(with-eval-after-load 'projectile
+  (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+  (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
+
+#+end_src
+
+
+*** ⚙️ DART-MODE - dart-mode-format-before-save-hook.
+Add the format before save hook.
+#+begin_src elisp
+(defun dart-mode-format-before-save-hook ()
+  (when (eq major-mode 'dart-mode)
+    (lsp-format-buffer)))
+
+(add-hook 'before-save-hook #'dart-mode-format-before-save-hook)
+#+end_src
+
+
+** 📦 LSP-DART
+Emacs Dart IDE using lsp-mode to connect to Dart Analysis Server.
+
+https://github.com/emacs-lsp/lsp-dart
+
+*** 🇻️ LSP-DART lsp-dart-dap-flutter-hot-reload-on-save
+Format & hot reload on save hook.
+#+begin_src elisp
+(setq lsp-dart-dap-flutter-hot-reload-on-save t)
+#+end_src
+
+
+*** 🇻 LSP-DART - lsp-dart-flutter-widget-guides
+Pretty widget guides.
+#+begin_src elisp
+(setq lsp-dart-flutter-widget-guides t)
+#+end_src
+
+
+*** 🇻 LSP-DART - lsp-dart-sdk-dir
+Specify the dart SDK path.
+#+begin_src elisp
+(setq lsp-dart-sdk-dir "/opt/dart-sdk")
+;; (setq lsp-dart-sdk-dir "~/flutter/bin/cache/dart-sdk")
+#+end_src
+
+** 📦 LSP-MODE
+Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages like company, flycheck and projectile.
+
+https://github.com/emacs-lsp/lsp-mode
+
+
+*** 🇻 LSP-MODE - lsp-headerline-breadcrumb-enable
+Toggle headerline breadcrumb.
+#+begin_src elisp
+(setq lsp-headerline-breadcrumb-enable nil)
+#+end_src
+
+
+*** 🇻 LSP-MODE - lsp-modeline-code-actions-enable
+Modeline code actions.
+#+begin_src elisp
+(setq lsp-modeline-code-actions-enable t)
+#+end_src
+
+
+*** 🇻 LSP-MODE - lsp-signature-auto-activate
+Signature help.
+#+begin_src elisp
+(setq lsp-signature-auto-activate nil)
+#+end_src
+
+
+*** 🇻 LSP-MODE - lsp-completion-show-detail
+Completion item detail.
+#+begin_src elisp
+(setq lsp-completion-show-detail t)
+#+end_src
+
+
+*** 🇻 LSP-MODE - lsp-completion-show-kind
+Completion item kind.
+#+begin_src elisp
+(setq lsp-completion-show-kind t)
+#+end_src
+
+
+** 📦 LSP-UI
+
+This package contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
+
+https://github.com/emacs-lsp/lsp-ui
+
+
+
+*** 🇻 LSP-UI - lsp-ui-sideline
+Useful information displayed on the right side.
+
+
+**** 🇻 LSP-UI - lsp-ui-sideline-enable
+Toggle sideline.
+#+begin_src elisp
+(setq lsp-ui-sideline-enable nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-sideline-show-diagnostics
+Show diagnostic messages in sideline.
+#+begin_src elisp
+(setq lsp-ui-sideline-show-diagnostics t)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-sideline-show-code-actions
+Show code actions in sideline (WARNING: is rather verbose).
+#+begin_src elisp
+(setq lsp-ui-sideline-show-code-actions nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-sideline-update-mode
+#+begin_src elisp
+(setq lsp-ui-sideline-update-mode nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-sideline-delay
+#+begin_src elisp
+(setq lsp-ui-sideline-delay 1)
+#+end_src
+
+
+*** 🇻 LSP-UI - lsp-ui-peek
+Add peek feature.
+
+
+**** 🇻 LSP-UI - lsp-ui-peek-enable
+#+begin_src elisp
+(setq lsp-ui-peek-enable nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-peek-show-directory
+#+begin_src elisp
+(setq lsp-ui-peek-show-directory t)
+#+end_src
+
+
+*** 🇻 LSP-UI - lsp-ui-doc
+Show object documentation at point in a child frame.
+
+**** 🇻 LSP-UI - lsp-ui-doc-enable
+Enable lsp-ui-doc.
+#+begin_src elisp
+(setq lsp-ui-doc-enable t)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-doc-position
+Where to display the doc.
+#+begin_src elisp
+;; (setq lsp-ui-doc-position "bottom")
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-doc-delay
+Number of seconds before showing the doc.
+#+begin_src elisp
+(setq lsp-ui-doc-delay 1)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-doc-show-with-cursor
+When non-nil, move the cursor over a symbol to show the doc.
+#+begin_src elisp
+(setq lsp-ui-doc-show-with-cursor nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-doc-show-with-mouse
+When non-nil, move the mouse pointer over a symbol to show the doc.
+#+begin_src elisp
+(setq lsp-ui-doc-show-with-mouse t)
+#+end_src
+
+
+*** 🇻 LSP-UI - lsp-ui-imenu
+Show imenu entries.
+
+
+**** 🇻 LSP-UI - lsp-ui-imenu-window-width
+Set window width.
+#+begin_src elisp
+;; (setq lsp-ui-imenu-window-width 30)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-imenu--custom-mode-line-format
+Mode line format.
+#+begin_src elisp
+;; (setq lsp-ui-imenu--custom-mode-line-format nil)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-imenu-auto-refresh
+Auto refresh when necessary.
+#+begin_src elisp
+(setq lsp-ui-imenu-auto-refresh t)
+#+end_src
+
+
+**** 🇻 LSP-UI - lsp-ui-imenu-refresh-delay
+Auto refresh debounce.
+#+begin_src elisp
+(setq lsp-ui-imenu-refresh-delay 1)
+#+end_src
+
+
+** 📦 COMAPNY
+Company is a text completion framework for Emacs. The name stands for "complete anything".
+
+https://github.com/company-mode/company-mode
+
+
+*** ⚙️ COMPANY - company-mode-hook
+Add the hook.
+#+begin_src elisp
+;; (company-mode-hook)
+#+end_src
+
+
+*** 🇻 COMPANY - company-idle-delay
+Set the idle delay for when completion suggestions appear.
+#+begin_src elisp
+(setq company-idle-delay 0.1)
+#+end_src
+
+
+*** 🇻 COMPANY - company-minimum-prefix-length
+The amount of characters required before triggering popup.
+#+begin_src elisp
+(setq company-minimum-prefix-length 2)
+#+end_src
+
+
+*** 🇻 COMPANY - company-tooltip-limit
+Max suggestions to show in the popup.
+#+begin_src elisp
+(setq company-tooltip-limit 8)
+#+end_src
+
+
+*** 🇻 COMPANY - company-tooltip-maximum-width
+The max width of the popup.
+/Note that this creates a hard clipped edge./
+#+begin_src elisp
+(setq company-tooltip-maximum-width 60)
+#+end_src
+
+
+*** 🇻 COMPANY - company-tooltip-flip-when-above
+Flip the popup when above.
+#+begin_src elisp
+(setq company-tooltip-flip-when-above t)
+#+end_src
+
+
+** 📦 COMPANY-BOX
+A company front-end with icons.
+This allows completion suggestions (from comapny) to render a secondary popup displaying docs for each suggestion.
+
+https://github.com/sebastiencs/company-box
+
+
+*** ⚙️ COMPANY-BOX - Initialize
+#+begin_src elisp
+(require 'company-box)
+(add-hook 'company-mode-hook 'company-box-mode)
+#+end_src
+
+
+*** ⚙ COMPANY-BOX - company-box-mode
+Add the hook.
+#+begin_src elisp
+;; (add-hook 'company-box-mode)
+#+end_src
+
+
+** 📦 ALL-THE-ICONS
+Pretty icons!
+
+https://github.com/domtronn/all-the-icons.el
+
+
+*** 🇻 ALL-THE-ICONS - all-the-icons-scale-factor
+Global scaling factor of icons.
+#+begin_src elisp
+(setq all-the-icons-scale-factor 0.7) ;; this is global factor
+#+end_src
+
+
+** 📦 PROJECTILE
+Projectile is a project interaction library for Emacs. Its goal is to provide a nice set of features operating on a project level without introducing external dependencies (when feasible).
+
+https://github.com/bbatsov/projectile
+
+
+*** 🇻 PROJECTILE - Set projectile search path.
+Specify and set the path for projectile to search for projects.
+#+begin_src elisp
+(setq projectile-project-search-path '("~/dev/"))
+#+end_src
+
+
+
+** 📦 BEACON
+Beacon is a minor mode that will help you to never loose your cursor again!
+
+https://github.com/emacs-straight/beacon
+
+
+*** 🇻 BEACON - beacon-mode
+Turn it on everywhere.
+#+begin_src elisp
+(beacon-mode 1)
+#+end_src
+
+
+** 📦 NYAN-MODE
+Meow. 🐱
+
+https://github.com/TeMPOraL/nyan-mode
+
+
+*** 🇻 NYAN-MODE - nyan-mode
+Enable it (static without animation).
+#+begin_src elisp
+(nyan-mode)
+#+end_src
+
+
+*** 🇻 NYAN-MODE - nyan-start-animation
+Start the animation on init.
+#+begin_src elisp
+(nyan-start-animation)
+#+end_src
+
+
+* 🎮️ COMBOS
+
+
+** 🎮️ WINDOW
+
+
+*** 🔘 WINDOW - Incrementally resize windows.
+#+begin_src elisp
+;; (defhydra doom-window-resize-hydra (:hint nil)
+;;         ("h" evil-window-decrease-width)
+;;         ("j" evil-window-increase-height)
+;;         ("k" evil-window-decrease-height)
+;;         ("l" evil-window-increase-width)
+;;         ("q" nil))
+
+
+;; (map! :leader
+;;        (:prefix ("r" . "Window"))
+;;        :desc "resize"
+;;        "SPC" #'doom-window-resize-hydra/body)
+#+end_src
+
+
+** 🎮️ LSP-UI
+
+*** 🔘 LSP-UI - Show doc popup.
+=SPC-l-d=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Show doc popup"
+       "l d" #'lsp-ui-doc-show)
+#+end_src
+
+
+** 🎮️ LSP-MODE
+
+*** 🔘 LSP-MODE - Remap lsp-mode prefix to "\".
+#+begin_src elisp
+;; (evil-define-key 'normal lsp-mode-map (kbd "\\") lsp-command-map)
+#+end_src
+
+
+*** 🔘 LSP-MODE - Organize imports.
+=SPC-l-o=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Organize imports"
+       "l o" #'lsp-organize-imports)
+#+end_src
+
+
+*** 🔘 LSP-MODE - Execute code actions.
+=SPC-l-c=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Execute code action"
+       "l c" #'lsp-execute-code-action)
+#+end_src
+
+*** 🔘 LSP-MODE - Execute code actions.
+=SPC-l-f=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Format buffer"
+       "l f" #'lsp-format-buffer)
+#+end_src
+
+
+** 🎮️ LSP-DART
+
+*** 🔘 LSP-DART - Flutter hot reload.
+=SPC-l-f-r=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Hot reload"
+       "l f r" #'lsp-dart-dap-flutter-hot-reload)
+#+end_src
+
+*** 🔘 LSP-DART - Flutter hot restart.
+=SPC-l-f-R=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("l" . "lsp"))
+       :desc "Hot restart"
+       "l R" #'lsp-dart-dap-flutter-hot-restart)
+#+end_src
+
+
+*** 🔘 LSP-DART - Show doc popup.
+=SPC-l-f-b=
+#+begin_src elisp
+;; (map! :leader
+;;        (:prefix ("l" . "lsp"))
+;;        :desc "Run build runner"
+;;        "l b" #'lsp-dart--run-command "build_runner build")
+#+end_src
+
+
+** 🎮 DAP-MODE
+
+*** 🔘 DAP-MODE - Start debugger.
+=SPC-d-s=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("d" . "dap"))
+       :desc "Start dap debugger"
+       "d s" #'dap-debug)
+#+end_src
+
+
+*** 🔘 DAP-MODE - Disconnect debugger.
+=SPC-d-d=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("d" . "dap"))
+       :desc "Disconnect dap debugger"
+       "d d" #'dap-disconnect)
+#+end_src
+
+*** 🔘 DAP-MODE - Delete all debugger sessions.
+=SPC-d-D=
+#+begin_src elisp
+(map! :leader
+       (:prefix ("d" . "dap"))
+       :desc "Delete all sessions"
+       "d D" #'dap-delete-all-sessions)
+#+end_src
