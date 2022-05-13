@@ -1,0 +1,99 @@
+# -*- mode: snippet -*-
+# name: flutter-stacked-viewmodel1
+# contributor: Paurini Taketakehikuroa Wiringi
+# key: view
+# --
+//////////////////////////////////////////////////
+// ${1:$(downcase yas-text)}_model.dart
+//////////////////////////////////////////////////
+import 'package:stacked/stacked.dart';
+
+class ${1:enumerate}ViewModel extends BaseViewModel {
+  final String busyKeyUpdate1 = 'update1';
+  final String busyKeyUpdate2 = 'update2';
+
+  // Values to be accessible by the view.
+  String value1 = 'Value 1 default';
+  String value2 = 'Value 2 default';
+
+  // Initializes values on the views Widget rebuild.
+  void init() async {
+    final result =
+        await runBusyFuture(mockApiRequest(), busyObject: busyKeyUpdate1);
+    value1 = result;
+    value2 = 'Value 2 initialized';
+    notifyListeners();
+  }
+
+  // Called from the view to update value2
+  // When calling a future, we place it inside a runBusyFuture method.
+  Future<void> updateValue2() async {
+    final result =
+        await runBusyFuture(mockApiRequest(), busyObject: busyKeyUpdate2);
+    value2 = result;
+    notifyListeners();
+  }
+
+  // A mock API request
+  Future<String> mockApiRequest() async {
+    await Future.delayed(const Duration(seconds: 4));
+    return 'Value from API.';
+  }
+}
+
+
+//////////////////////////////////////////////////
+// ${1:$(downcase yas-text)}_builder.dart
+//////////////////////////////////////////////////
+import 'package:stacked/stacked.dart';
+import 'package:flutter/material.dart';
+import '${1:$(downcase yas-text)}_model.dart';
+import '${1:$(downcase yas-text)}_view.dart';
+
+class $1Builder extends StatelessWidget {
+  const $1Builder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<$1ViewModel>.reactive(
+      viewModelBuilder: () => $1ViewModel(),
+      onModelReady: (viewModel) => viewModel.init(),
+      builder: (context, viewModel, child) =>
+          $1View(viewModel: viewModel, child: child),
+    );
+  }
+}
+
+//////////////////////////////////////////////////
+// ${1:$(downcase yas-text)}_view.dart
+//////////////////////////////////////////////////
+import 'package:flutter/material.dart';
+import '${1:$(downcase yas-text)}_model.dart';
+
+class $1View extends ${3:$$(yas-choose-value '("StatelessWidget" "ConsumerWidget"))} {
+  const $1View({Key? key, required this.viewModel, required this.child}) : super(key: key);
+
+  final $1ViewModel viewModel;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    bool busyUpdate1 = viewModel.busy(viewModel.busyKeyUpdate1);
+    bool busyUpdate2 = viewModel.busy(viewModel.busyKeyUpdate2);
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(busyUpdate1 ? 'Loading...' : viewModel.value1),
+            Text(busyUpdate2 ? 'Loading...' : viewModel.value1),
+            ElevatedButton(
+                child: const Text('2'),
+                onPressed: () async => await viewModel.updateValue2()),
+          ],
+        ),
+      ),
+    );
+  }
+}

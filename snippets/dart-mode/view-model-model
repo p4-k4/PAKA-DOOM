@@ -1,0 +1,25 @@
+# -*- mode: snippet -*-
+# name: view-model-model
+# contributor: Paurini TakeTakehikuroa Wiringi
+# --
+
+class ${1:enumerate}ViewModel extends ViewModel {
+
+  // A static variable of the provider for this ViewModel.
+  static final provider =
+      ChangeNotifierProvider.autoDispose<$1ViewModel>((ref) => $1ViewModel());
+
+  // Override the init method to make calls
+  // or call methods of this ViewModel when it initiates.
+  @override
+  Future<void> init() async {
+    super.init();
+  }
+
+  // A model variable and it's update method.
+  int counter = 0;
+  increment() async {
+    counter++;
+    notifyListeners(); // Make sure to call notifyListeners() last.
+  }
+}

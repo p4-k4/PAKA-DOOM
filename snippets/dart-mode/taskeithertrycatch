@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# key: task
+# contributor: Paurini Taketakehikuroa Wiringi
+# name: flutter-fpdart-taskeither
+# --
+/// Left returns the error, right returns the specified object.
+TaskEither<Object, $2> $1(String url) {
+  return TaskEither.tryCatch(() async {
+    final result = await $3;
+  }, (error, stackTrace) => error);
+}

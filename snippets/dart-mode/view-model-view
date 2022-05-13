@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: view-model-view
+# contributor: Paurini Taketakehikuroa Wiringi
+# --
+
+class ${1:enumerate} extends ConsumerWidget {
+  const $1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ViewModelBuilder<${2:enumerate}>(
+      provider: $2.provider,
+      builder: (context, model) => Text(model.counter.toString()),
+    );
+  }
+}

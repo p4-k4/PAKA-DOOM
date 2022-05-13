@@ -1,0 +1,39 @@
+# -*- mode: snippet -*-
+# name: flutter-hooks-create-hook
+# key: hook
+# contributor: Paurini Taketakehikuroa Wiringi
+# --
+
+// import 'package:flutter/widgets.dart';
+// import 'package:flutter_hooks/flutter_hooks.dart';
+//
+int use${1:enumerate}() {
+  return use(const _$1());
+}
+
+class _$1 extends Hook<${2:enumerate}> {
+  const _$1();
+
+  @override
+  __$1State createState() => __$1State();
+}
+
+class __$1State extends HookState<$2, _$1> {
+
+  @override
+  void initHook() {
+    super.initHook();
+    // TODO Implementatiion after calling super
+  }
+
+  @override
+  $2 build(BuildContext context) {
+    return $3;
+  }
+
+  @override
+  void dispose() {
+    // TODO Implementatiion before calling super
+    super.dispose();
+  }
+}
