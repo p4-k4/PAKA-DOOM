@@ -446,6 +446,7 @@ Start the animation on init.
 
 
 *** 🔘 WINDOW - Incrementally resize windows.
+=SPC-w-r= (use =h,j,k,l,q,ESC= to resize)
 #+begin_src elisp
 (defhydra doom-window-resize-hydra (:hint nil)
         ("h" evil-window-decrease-width)
