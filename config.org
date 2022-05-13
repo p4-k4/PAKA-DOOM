@@ -447,18 +447,17 @@ Start the animation on init.
 
 *** 🔘 WINDOW - Incrementally resize windows.
 #+begin_src elisp
-;; (defhydra doom-window-resize-hydra (:hint nil)
-;;         ("h" evil-window-decrease-width)
-;;         ("j" evil-window-increase-height)
-;;         ("k" evil-window-decrease-height)
-;;         ("l" evil-window-increase-width)
-;;         ("q" nil))
+(defhydra doom-window-resize-hydra (:hint nil)
+        ("h" evil-window-decrease-width)
+        ("j" evil-window-increase-height)
+        ("k" evil-window-decrease-height)
+        ("l" evil-window-increase-width)
+        ("q" nil))
 
-
-;; (map! :leader
-;;        (:prefix ("r" . "Window"))
-;;        :desc "resize"
-;;        "SPC" #'doom-window-resize-hydra/body)
+(map! :leader
+       (:prefix ("w" . "Window"))
+       :desc "resize"
+       "w r" #'doom-window-resize-hydra/body)
 #+end_src
 
 
