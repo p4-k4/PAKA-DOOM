@@ -507,7 +507,7 @@ Start the animation on init.
 (map! :leader
        (:prefix ("l" . "lsp"))
        :desc "Format buffer"
-       "l f" #'lsp-format-buffer)
+       "l f f" #'lsp-format-buffer)
 #+end_src
 
 
@@ -528,7 +528,7 @@ Start the animation on init.
 (map! :leader
        (:prefix ("l" . "lsp"))
        :desc "Hot restart"
-       "l R" #'lsp-dart-dap-flutter-hot-restart)
+       "l f R" #'lsp-dart-dap-flutter-hot-restart)
 #+end_src
 
 
