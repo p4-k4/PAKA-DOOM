@@ -11,7 +11,8 @@ The fuck you doing here? make your own config...
   - [[#️-doom-emacs---init][⚙️ DOOM EMACS - INIT]]
   - [[#-doom-emacs---fonts][🌟 DOOM EMACS - FONTS]]
 - [[#-packages][📦 PACKAGES]]
-  - [[#-packages---init][⚙ PACKAGES - Init]]
+  - [[#-init][⚙ Init]]
+  - [[#-packages---rustic][📦 PACKAGES - RUSTIC]]
   - [[#-dart-mode][📦 DART-MODE]]
   - [[#-lsp-dart][📦 LSP-DART]]
   - [[#-lsp-mode][📦 LSP-MODE]]
@@ -58,11 +59,20 @@ The fuck you doing here? make your own config...
 
 * 📦 PACKAGES
 
-** ⚙ PACKAGES - Init
+** ⚙ Init
 Get packages.
 #+begin_src elisp
 (use-package beacon)
 (use-package nyan-mode)
+#+end_src
+
+
+** 📦 PACKAGES - RUSTIC
+Rust development environment for Emac.
+
+*** ⚙ Init
+#+begin_src elisp
+(use-package rustic)
 #+end_src
 
 
@@ -445,8 +455,8 @@ Start the animation on init.
 ** 🎮️ WINDOW
 
 
-*** 🔘 WINDOW - Incrementally resize windows.
-=SPC-w-r= (use =h,j,k,l,q,ESC= to resize)
+*** 🔘 WINDOW - Interactively/incrementally resize windows.
+=SPC-w-SPC= (use =h,j,k,l,q,ESC= to resize)
 #+begin_src elisp
 (defhydra doom-window-resize-hydra (:hint nil)
         ("h" evil-window-decrease-width)
@@ -458,7 +468,7 @@ Start the animation on init.
 (map! :leader
        (:prefix ("w" . "Window"))
        :desc "resize"
-       "w r" #'doom-window-resize-hydra/body)
+       "w SPC" #'doom-window-resize-hydra/body)
 #+end_src
 
 
